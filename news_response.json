@@ -1,0 +1,38 @@
+[
+    {
+        "author": "Lauren Feiner",
+        "title": "Anthropic&#8217;s Mythos rollout has missed America\u2019s cyberscurity agency",
+        "description": "Several US federal agencies are taking up Anthropic's new cybersecurity model to find vulnerabilities, but one is reportedly not getting in on the action: the nation's central cybersecurity coordinator. On Tuesday, Axios reported that the Cybersecurity and Infrastructure Security Agency (CISA) didn't have access to Mythos Preview, which Anthropic has touted as a powerful tool for finding and patching security vulnerabilities. Meanwhile, other agencies like Commerce Department and National Security Agency (NSA) are reportedly using the model, and President Donald Trump's administration has been...",
+        "url": "https://www.theverge.com/policy/916758/anthropic-mythos-preview-cisa-left-out",
+        "source": "The Verge",
+        "image": null,
+        "category": "technology",
+        "language": "en",
+        "country": "us",
+        "published_at": "2026-04-22T16:57:36+00:00"
+    },
+    {
+        "author": "Paul Mozur and Adam Satariano",
+        "title": "Anthropic\u2019s New Mythos A.I. Model Sets Off Global Alarms",
+        "description": "Mythos has triggered emergency responses from central banks and intelligence agencies globally, as Anthropic decides who has access to the powerful model.",
+        "url": "https://www.nytimes.com/2026/04/22/technology/anthropics-mythos-ai.html",
+        "source": "The New York Times",
+        "image": "https://static01.nyt.com/images/2026/04/23/business/00biz-mythos-risk/00biz-mythos-risk-mediumSquareAt3X.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2026-04-22T14:18:08+00:00"
+    },
+    {
+        "author": "Jay Barmann",
+        "title": "Anthropic's New Model, Mythos, Is So Dangerous It Isn't Being Released to the Public",
+        "description": "Anthropic's latest AI model, named Claude Mythos Preview, is capable of hacking into major banking systems, perhaps many at once, and doing massive damage if it fell into the wrong hands. Banks are being encouraged to test it out.",
+        "url": "https://sfist.com/2026/04/15/anthropics-new-model-mythos-is-so-dangerous-it-isnt-being-released-to-the-public/",
+        "source": "sfist",
+        "image": "https://img.sfist.com/2026/04/dario-amodei-getty.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2026-04-15T20:04:11+00:00"
+    }
+]

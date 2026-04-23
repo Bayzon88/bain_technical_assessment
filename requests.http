@@ -1,0 +1,4 @@
+
+###
+
+GET http://127.0.0.1:8000/api/v1/insights/?company_name=anthropic&approach=finance&date_start=2026-04-15&date_end=2026-04-22
