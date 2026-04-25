@@ -59,4 +59,4 @@ ENVIRONMENT=production
 
 ## Images
 
-![report generated](https://github.com/Bayzon88/bain_technical_assessment/report.png?raw=true)
+![report generated](https://github.com/Bayzon88/bain_technical_assessment/blob/main/report.png?raw=true)
