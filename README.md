@@ -1,10 +1,17 @@
 # Assignment
 
+Create a tool that lets partners plug in a company name and quickly translate relevant news into helpful insights and recommendations.
+The system will create a summary containing 3 parts:
+
+- Summary
+- Key Takeaway
+- Sources
+
 ## Implementation
 
 - System: Company Name -> News -> Insight
 - Delivery: Insight summary based on latest news
-- Architecture: Vertical Slice. Works better for PoC/MVP and is extendable beyond this stage(e.g new features)
+- Backend Architecture: Vertical Slice. Works better for PoC/MVP and is extendable beyond this stage(e.g new features)
 
 ## Requirements
 
@@ -20,7 +27,7 @@
 
 - System should only generate insights for 1 company at a time
 - System stores insights(for later)
-- System latency is acceptable(processing time below 5000s)
+- System latency is acceptable(currently exceeding 60s mark, we can improve later)
 - Insights report must not exceed 1 page, be concise and easy to read/explain
 
 ### Assumptions
@@ -59,4 +66,4 @@ ENVIRONMENT=production
 
 ## Images
 
-![report generated](https://github.com/Bayzon88/bain_technical_assessment/blob/main/report.png?raw=true)
+![report generated](https://raw.githubusercontent.com/Bayzon88/bain_technical_assessment/refs/heads/main/report.png)

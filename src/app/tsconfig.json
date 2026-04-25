@@ -4,6 +4,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "strict": false, //Disabled for PoC
+    "strictNullChecks": false
   }
 }

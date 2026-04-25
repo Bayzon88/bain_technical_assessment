@@ -40,7 +40,7 @@ const SearchBar = () => {
           <Field className='flex w-50'>
             <FieldLabel>Report approach</FieldLabel>
             {/* TODO: fix unknown type error in select element */}
-            <Select onValueChange={(value) => setApproach(value)}>
+            <Select onValueChange={(value) => setApproach(value as string)}>
               <SelectTrigger className='w-full max-w-48'>
                 <SelectValue placeholder='Select an approach' />
               </SelectTrigger>
