@@ -48,8 +48,7 @@ def get_company_insights(
         }
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            
+            status_code=e.status_code if isinstance(e, HTTPException) else status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
         ) from e
     

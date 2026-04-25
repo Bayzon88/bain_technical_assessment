@@ -7,8 +7,6 @@ from langchain.messages import HumanMessage, SystemMessage
 
 logging.basicConfig(level=logging.INFO)
 
-
-
 from src.api.insights.insights_graph.prompt_templates import generate_citation_validation_prompt, generate_report_human_message_prompt, generate_report_system_message_prompt
 from src.api.insights.insights_graph.normalization import normalize_articles
 from src.api.insights.config import OPENAI_API_KEY
@@ -66,12 +64,15 @@ def generate_report(state: InsightsGraphState) -> InsightsGraphState:
     ]
     llm_response = llm.invoke(messages)
     state.final_report = llm_response.content
-    state.final_report = "This is a report about microsoft." #TODO: Remove, just for testing
+    
     return state
 
 
-def is_citations_valid(state: InsightsGraphState) -> Literal["generate_report", END]:
+def is_citations_valid(state: InsightsGraphState) -> Literal["increment_retry", END]:
     # Validate citations to make sure the information in the report is supported by the articles
+    # TODO: This needs more work, currently it correctly identifies citations and relevant content in the report about 85% of the time. 
+    if state.retry_count >= state.max_retries:
+        raise Exception("Report validation failed after maximum retries.")
     
     logging.info("Validating citations...")
     system_message = generate_citation_validation_prompt(state.final_report,state.normalized_articles)
@@ -84,15 +85,12 @@ def is_citations_valid(state: InsightsGraphState) -> Literal["generate_report", 
     if is_valid:
         logging.info("Citations are valid.")
         return END
-    else:
-        logging.warning(f"Citations are invalid. Retrying #{state.retry_count+1} report generation...")
-        state.retry_count +=1
-        return "generate_report" if state.retry_count < state.max_retries else END
-
-def handle_max_retries(state: InsightsGraphState) -> InsightsGraphState:
-    logging.info("Handling max retries...")
-    state.validation_warning = "MAX_RETRIES_EXCEEDED"
-    return state
+        
+    return "increment_retry"
+        
+def increment_retry(state:  InsightsGraphState) -> dict: 
+    logging.warning(f"Citations are invalid. Retrying #{state.retry_count+1} report generation...")
+    return {"retry_count": state.retry_count + 1}
 
 def build_graph():
     builder = StateGraph(InsightsGraphState)
@@ -103,22 +101,19 @@ def build_graph():
     builder.add_node("keytakeaways", extract_keytakeaways)
     builder.add_node("generate_report", generate_report)
     builder.add_node("validate", is_citations_valid)
-    builder.add_node("fallback", handle_max_retries)
-
+    
+    builder.add_node("increment_retry", increment_retry)
     
     builder.set_entry_point("normalize")
 
     builder.add_edge("normalize", "extract")
     builder.add_edge("extract", "keytakeaways")
     builder.add_edge("keytakeaways", "generate_report")
-    builder.add_conditional_edges("generate_report", is_citations_valid, ["generate_report", END])
-
-    #Validation step TODO: Review validation and handle retries
-    # builder.add_edge("validate", END)
-    # builder.add_conditional_edges("validate", "fallback")
-    # builder.add_edge("validate", END)
+    builder.add_edge("increment_retry", "generate_report")
     
-
+    #Loop for validating report against articles. 
+    builder.add_conditional_edges("generate_report", is_citations_valid, ["increment_retry", END])
+    
     return builder.compile()
 
 
@@ -127,11 +122,7 @@ def generate_graph_result(news: list, approach: str) -> str:
 
     messages = [HumanMessage(content="test")]
     messages = graph.invoke({"raw_articles": news, "insight_approach": approach}) 
-
-    if messages.get("validation_warning") == "MAX_RETRIES_EXCEEDED":
-        logging.warning("Max retries exceeded during graph execution.")
-        raise Exception("Max retries exceeded during graph execution.")
-        
+    
     return  messages['final_report']
 
 

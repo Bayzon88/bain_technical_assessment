@@ -69,69 +69,50 @@ def generate_report_human_message_prompt(insight_approach: str, normalized_artic
     return HUMAN_TEMPLATE
 
 def generate_citation_validation_prompt(final_report: str, normalized_articles: list[Article]) -> str:
+    articles_text = "\n".join([
+        f"[{i+1}] Title: {a.title}\nDescription: {a.description}"
+        for i, a in enumerate(normalized_articles)
+    ])
+
     return f"""
-            You are a strict fact-checker validating whether a report is fully grounded in the provided articles.
+    You are a fact-checker validating whether a report is grounded in the provided articles.
 
-            OVERALL TASK:
-            Determine if the final report is BOTH:
-            1) Structurally valid (citations exist and are in range)
-            2) Semantically grounded (all claims are supported by cited articles)
+    TASK:
+    Determine if the final report is valid by checking two things only:
+    1) Every citation [n] in the report exists in the articles list
+    2) Every key claim in the report can be reasonably traced to at least one cited article
 
-            You must reject the report if ANY rule is violated.
+    ---
+    VALIDATION STEPS:
 
-            ---
+    Step 1 — Citation Range Check:
+    - Extract all [n] citations from the report
+    - Verify each n is between 1 and {len(normalized_articles)}
+    - If any citation is out of range → INVALID
 
-            VALIDATION STEPS (follow internally, do not output):
+    Step 2 — Claim Grounding Check:
+    - For each key claim in the report, check if it is reasonably supported by its cited article
+    - "Reasonably supported" means the article describes the same event, trend, or fact
+    - Do NOT penalize for minor paraphrasing or summarization
+    - Do NOT penalize for mentioning companies that appear in articles as context
 
-            Step 1 — Citation Check:
-            - Extract all citations [n] from the report
-            - Verify each [n] exists in the articles list
-            - If any citation is out of range → INVALID
+    ---
+    RULES:
+    - Only fail if a claim is clearly fabricated or unsupported
+    - Paraphrasing and interpretation are allowed
+    - If unsure whether a claim is supported → assume True
 
-            Step 2 — Entity Consistency Check:
-            - Identify the main companies/topics discussed in the report
-            - Compare them with the articles
-            - If the report discusses entities NOT present in the articles → INVALID
+    ---
+    FINAL REPORT:
+    {final_report}
 
-            Example:
-            - Report mentions "Microsoft"
-            - Articles only mention "Anthropic"
-            → INVALID
+    ---
+    ARTICLES:
+    {articles_text}
 
-            Step 3 — Claim Grounding Check:
-            - For each key claim in the report:
-            - Verify it is supported by at least one cited article
-            - If a claim cannot be traced to the cited article → INVALID
-
-            Step 4 — Topic Relevance Check:
-            - Ensure the report stays within the scope of the articles
-            - If the report introduces unrelated topics → INVALID
-
-            ---
-
-            STRICT RULES:
-            - Be highly strict. If unsure → return False
-            - Do NOT assume missing connections
-            - Do NOT infer beyond the articles
-            - All parts of the report must be grounded in the articles
-
-            ---
-
-            FINAL REPORT:
-            {final_report}
-
-            ---
-
-            ARTICLES (indexed):
-            {[
-                f"[{i+1}] Title: {a.title} | Description: {a.description}"
-                for i, a in enumerate(normalized_articles)
-            ]}
-
-            ---
-
-            OUTPUT:
-            Return ONLY:
-            - True → if ALL checks pass
-            - False → if ANY check fails
-            """
+    ---
+    OUTPUT:
+    Return ONLY one word:
+    - True → if all citations are in range and claims are reasonably grounded
+    - False → if any citation is out of range or a claim is clearly fabricated
+    """

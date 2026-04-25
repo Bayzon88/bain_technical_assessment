@@ -40,3 +40,9 @@
 - React: Library and unopinionated, allows us to start simple and grow as needed.
 - Context API: Being a PoC, there is no need to use State Management libraries, this reduces boilerplate and development time but the trade off is that if the system out-grows the initial requirements we may need to refactor. For PoC i preffer Context over State Management.
 - UI: Shadcn + Tailwind, AI is heavily influence by tailwind so we can expect seamless development process with AI tools. Shadcn is a mature/easy to use framework and comes with pre-built components so reduces the development cycle time.
+
+## Run App
+
+```bash
+docker run -p 5050:8000 business-insights
+```

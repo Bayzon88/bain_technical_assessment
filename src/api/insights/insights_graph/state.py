@@ -4,11 +4,11 @@ from pydantic import BaseModel, Field
 
 
 class Article(BaseModel):
-    author: str
-    title: str
+    author: Optional[str]
+    title: Optional[str]
     description: str
     url: str
-    source: str
+    source: Optional[str]
     image: Optional[str]
     category: Optional[str]
     language: Optional[str]
