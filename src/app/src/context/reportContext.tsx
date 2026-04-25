@@ -36,7 +36,10 @@ export const ReportProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         date_end: "",
       });
 
-      const response = await fetch(`http://127.0.0.1:8000/api/v1/insights/?${params.toString()}`);
+      // const response = await fetch(`http://127.0.0.1:8000/api/v1/insights/?${params.toString()}`); #Local test
+      const response = await fetch(
+        `https://alvarobeltran.dev/business-insights-api/api/v1/insights/?${params.toString()}`,
+      ); //Production TODO: move to env variable
 
       if (response.status === 404) {
         setReport(

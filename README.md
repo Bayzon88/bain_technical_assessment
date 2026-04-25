@@ -43,6 +43,20 @@
 
 ## Run App
 
+### Docker command
+
 ```bash
-docker run -p 5050:8000 business-insights
+sudo docker run --env-file .env -p 5050:8000 business-insights
 ```
+
+### Environmental variables
+
+```bash
+NEWS_API_KEY=[mediastack_api_key]
+OPENAI_API_KEY=
+ENVIRONMENT=production
+```
+
+## Images
+
+![report generated](https://github.com/Bayzon88/bain_technical_assessment/report.png?raw=true)
